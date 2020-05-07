@@ -1,0 +1,29 @@
+$material-light:(
+    'navigation-drawer': #F6F8F9,
+    'background': #F6F8F9,
+    'text': (
+        'primary': #353535,
+        'link': #576b95,
+    ),
+);
+
+$material-dark:(
+    'navigation-drawer': #000000,
+    'background': #000000,
+    'text': (
+        'link': #576b95,
+    ),
+);
+
+$headings:(
+    'h2': (
+        'size': 2.5rem,
+        'line-height': 1.5em,
+        'weight': 400
+    ),
+    'h3': (
+        'size': 2.0rem,
+        'line-height': 1.5em,
+        'weight': 400
+    ),
+);
