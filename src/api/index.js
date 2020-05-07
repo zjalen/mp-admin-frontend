@@ -178,6 +178,16 @@ export function createMessage(params) {
 }
 
 /**
+ * 删除自定义消息
+ */
+export function deleteMessage(id) {
+  return request({
+    url: '/messages/' + id,
+    method: 'delete',
+  })
+}
+
+/**
  * 更新消息
  */
 export function updateMessage(id, params) {

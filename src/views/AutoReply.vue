@@ -31,7 +31,7 @@
         { text: '匹配消息', value: 'text', sortable: true},
         { text: '消息类型', value: 'type_name', sortable: false},
         { text: '匹配程度', value: 'match_type_name', sortable: false},
-        { text: '自动回复消息', value: 'message.content', sortable: false},
+        { text: '自动回复消息', value: 'message_content', sortable: false, width: 200},
         { text: '回复消息类型', value: 'message.type_name', sortable: false},
         { text: '备注', value: 'remark', sortable: true },
         { text: '创建时间', value: 'created_at', sortable: true },
@@ -76,7 +76,7 @@
           icon: 'plus'
         },
       ],
-      table_json_columns: [],
+      table_json_columns: ['item.message_content'],
       table_actions: [
         {
           sign: 'edit',

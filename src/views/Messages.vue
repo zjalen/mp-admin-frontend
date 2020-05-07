@@ -20,7 +20,7 @@
 
 <script>
   import CommonTable from '../components/table/CommonTable'
-  import { getMessages } from '../api'
+  import { getMessages, deleteMessage } from '../api'
   import MessageCreateAndEdit from './MessageCreateAndEdit'
   export default {
     props: {
@@ -73,9 +73,10 @@
       ],
     }),
     mounted () {
+      this.$VM.$on('onDialogConfirm', this.onDialogConfirm);
     },
     beforeDestroy() {
-
+      this.$VM.$off('onDialogConfirm', this.onDialogConfirm);
     },
     computed: {
       table_actions () {
@@ -86,6 +87,12 @@
               text: '编辑',
               tip: '编辑消息',
               icon: 'pencil'
+            },
+            {
+              sign: 'delete',
+              text: '删除',
+              tip: '删除消息',
+              icon: 'delete'
             },
           ]
         }else {
@@ -103,15 +110,18 @@
     methods: {
       onClickAction(params) {
         if (params.sign === 'edit') {
-          // this.$router.push({
-          //   name: 'message-edit',
-          //   params: {
-          //     message_id: params.item.id
-          //   }
-          // })
           this.message_id = params.item.id
           this.show_dialog = true
-        }else if (params.sign === 'choose') {
+        }else if (params.sign === 'delete') {
+          this.message_id = params.item.id
+          this.dialog = {
+            show: true,
+            title: '删除消息',
+            text: '删除消息后，相关自定义回复也会删除，确定吗？',
+            sign: 'deleteMessage'
+          }
+          this.$store.commit('setDialog', this.dialog);
+        } else if (params.sign === 'choose') {
           this.$emit('choose', params.item);
         }
       },
@@ -127,6 +137,23 @@
       onCloseEdit() {
         this.show_dialog = false
         this.$refs.custom_table.init()
+      },
+      onDialogConfirm(sign) {
+        this.dialog.show = false
+        this.$store.commit('setDialog', this.dialog);
+        if (sign === 'deleteMessage') {
+          deleteMessage(this.message_id).then(() => {
+            this.$store.commit('setSnackbar', {
+              message: '删除成功',
+              color: 'success',
+              timeout: 1500,
+              show: true
+            })
+            this.$nextTick(() => {
+              this.$refs.custom_table.init()
+            })
+          })
+        }
       }
     }
   }

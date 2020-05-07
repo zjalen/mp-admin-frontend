@@ -120,7 +120,7 @@
           value: 5,
           format: ['title', 'author', 'content', 'thumb_media_id', 'digest', 'source_url', 'show_cover'],
         },
-        { text: '素材', value: 6, format: ['media_id'] },
+        { text: '素材', value: 6, format: ['media_id', 'media_type'] },
         { text: '原始', value: 7, format: ['raw'] },
       ],
     }),
@@ -154,7 +154,7 @@
           append_form[val.sign] = val.value
         })
         this.params['content'] = JSON.stringify(append_form)
-        if (this.$route.name === 'message-edit') {
+        if (this.message_id) {
           updateMessage(this.message_id, this.params).then(() => {
             this.$store.commit('setSnackbar', {
               message: '修改成功',

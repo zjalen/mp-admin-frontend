@@ -20,6 +20,7 @@
     name: 'Menus',
     components: { CommonTable },
     data: () => ({
+      current_menu_id: null,
       table_headers: [
         {
           text: 'id',
@@ -79,6 +80,12 @@
         },
       ]
     }),
+    mounted() {
+      this.$VM.$on('onDialogConfirm', this.onDialogConfirm);
+    },
+    beforeDestroy() {
+      this.$VM.$off('onDialogConfirm', this.onDialogConfirm);
+    },
     methods: {
       onClickAction(params) {
         if (params.sign === 'edit') {
@@ -89,7 +96,21 @@
             }
           })
         } else if (params.sign === 'delete') {
-          deleteMenu(params.item.id).then(() => {
+          this.current_menu_id = params.item.id
+          this.dialog = {
+            show: true,
+            title: '是否删除菜单',
+            text: '删除菜单后不可恢复，确定吗？',
+            sign: 'deleteMenu'
+          }
+          this.$store.commit('setDialog', this.dialog);
+        }
+      },
+      onDialogConfirm(sign) {
+        this.dialog.show = false
+        this.$store.commit('setDialog', this.dialog);
+        if (sign === 'deleteMenu') {
+          deleteMenu(this.current_menu_id).then(() => {
             this.$store.commit('setSnackbar', {
               message: '删除成功',
               color: 'success',
